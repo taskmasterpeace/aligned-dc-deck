@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aligned DC - Digital Wellness Check</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg-deep: #0f1f0f;
+    --bg-main: #162016;
+    --bg-card: #1d2b1d;
+    --bg-card-hover: #243324;
+    --bg-card-inner: #1a261a;
+    --gold: #c4a265;
+    --gold-soft: #b8944f;
+    --gold-light: #d4b87a;
+    --gold-glow: rgba(196, 162, 101, 0.12);
+    --cream: #f0ead6;
+    --cream-soft: #d9d1bb;
+    --cream-muted: #a89e86;
+    --green-accent: #5a7a52;
+    --green-soft: #3d5438;
+    --green-bright: #7ca96e;
+    --coral: #d4836b;
+    --coral-soft: rgba(212, 131, 107, 0.15);
+    --border: rgba(196, 162, 101, 0.12);
+    --border-hover: rgba(196, 162, 101, 0.25);
+    --shadow: rgba(0,0,0,0.3);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-deep);
+    color: var(--cream);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .site-header {
+    background: linear-gradient(135deg, var(--bg-main) 0%, #1a2c17 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(196,162,101,0.04) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(90,122,82,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-content { position: relative; z-index: 1; }
+  .header-brand {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.25rem;
+  }
+  .header-tagline {
+    font-size: 1rem;
+    color: var(--cream-soft);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .header-subtitle {
+    font-size: 0.875rem;
+    color: var(--cream-muted);
+    margin-top: 0.5rem;
+  }
+
+  /* Navigation Tabs */
+  .tab-nav {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 0.6rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--cream-muted);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .tab-btn:hover {
+    color: var(--cream);
+    background: var(--bg-card);
+    border-color: var(--border);
+  }
+  .tab-btn.active {
+    color: var(--bg-deep);
+    background: var(--gold);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .tab-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Tab Content */
+  .tab-panel { display: none; padding: 1.5rem; max-width: 960px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* Section Headings */
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: var(--cream-soft);
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title svg { color: var(--gold); flex-shrink: 0; }
+  .card-text {
+    font-size: 0.875rem;
+    color: var(--cream-soft);
+    line-height: 1.7;
+  }
+  .card-text strong { color: var(--cream); font-weight: 600; }
+
+  /* Highlight Cards */
+  .highlight-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(196,162,101,0.05) 100%);
+    border-color: var(--gold-soft);
+  }
+  .urgent-card {
+    border-left: 3px solid var(--coral);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--coral-soft) 100%);
+  }
+  .win-card {
+    border-left: 3px solid var(--green-bright);
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(124,169,110,0.05) 100%);
+  }
+
+  /* Stats Row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--cream-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-easy { background: rgba(124,169,110,0.2); color: var(--green-bright); }
+  .badge-medium { background: rgba(196,162,101,0.2); color: var(--gold-light); }
+  .badge-hard { background: var(--coral-soft); color: var(--coral); }
+  .badge-free { background: rgba(124,169,110,0.2); color: var(--green-bright); }
+  .badge-urgent { background: var(--coral-soft); color: var(--coral); }
+  .badge-gold { background: rgba(196,162,101,0.2); color: var(--gold-light); }
+
+  /* Expandable Sections */
+  .expandable { cursor: pointer; }
+  .expandable .expand-icon {
+    transition: transform 0.2s ease;
+    color: var(--cream-muted);
+  }
+  .expandable.open .expand-icon { transform: rotate(90deg); }
+  .expand-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .expandable.open + .expand-content,
+  .expand-content.open {
+    max-height: 2000px;
+  }
+
+  /* Comparison Grid */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Progress / Bar */
+  .bar-container {
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .bar-gold { background: linear-gradient(90deg, var(--gold-soft), var(--gold-light)); }
+  .bar-green { background: linear-gradient(90deg, var(--green-accent), var(--green-bright)); }
+  .bar-coral { background: linear-gradient(90deg, #c27058, var(--coral)); }
+
+  /* Lists */
+  .check-list { list-style: none; padding: 0; }
+  .check-list li {
+    padding: 0.4rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    font-size: 0.875rem;
+    color: var(--cream-soft);
+  }
+  .check-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  /* Countdown */
+  .countdown-box {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(196,162,101,0.08) 100%);
+    border: 1px solid var(--gold-soft);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .countdown-label {
+    font-size: 0.8rem;
+    color: var(--cream-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .countdown-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .countdown-sub {
+    font-size: 0.85rem;
+    color: var(--cream-soft);
+    margin-top: 0.25rem;
+  }
+
+  /* Table-like rows */
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.875rem;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: var(--cream-muted); }
+  .info-value { color: var(--cream); font-weight: 500; text-align: right; }
+
+  /* Priority Number */
+  .priority-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--bg-deep);
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  /* Footer */
+  .site-footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+  .footer-name {
+    font-weight: 600;
+    color: var(--cream);
+    font-size: 0.9rem;
+  }
+  .footer-detail {
+    color: var(--cream-muted);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  .footer-detail a { color: var(--gold); text-decoration: none; }
+  .footer-detail a:hover { text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header-brand { font-size: 1.75rem; }
+    .tab-panel { padding: 1rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .compare-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 1.25rem; }
+    .countdown-value { font-size: 2rem; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #1a1a1a; }
+    .tab-nav { display: none; }
+    .tab-panel { display: block !important; page-break-inside: avoid; }
+    .card { border: 1px solid #ddd; break-inside: avoid; }
+    .site-header { background: white; border-bottom: 2px solid #c4a265; }
+    .header-brand { color: #1a2e1a; }
+    .section-title { color: #1a2e1a; }
+    .stat-value { color: #1a2e1a; }
+    .expand-content { max-height: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-content">
+    <div class="header-brand">Aligned DC</div>
+    <div class="header-tagline">Digital Wellness Check & Growth Blueprint</div>
+    <div class="header-subtitle">Prepared for Sunni -- March 2026</div>
+  </div>
+</header>
+
+<!-- TAB NAVIGATION -->
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" onclick="switchTab('welcome')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Welcome
+  </button>
+  <button class="tab-btn" onclick="switchTab('website')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    Your Website
+  </button>
+  <button class="tab-btn" onclick="switchTab('market')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Your Market
+  </button>
+  <button class="tab-btn" onclick="switchTab('plan')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    The Plan
+  </button>
+  <button class="tab-btn" onclick="switchTab('apparel')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2 12 5 8 2 3.62 3.46a2 2 0 0 0-1.34 1.89v15.32A1.33 1.33 0 0 0 3.62 22h16.76a1.33 1.33 0 0 0 1.34-1.33V5.35a2 2 0 0 0-1.34-1.89z"/><path d="M12 5v17"/></svg>
+    Apparel
+  </button>
+  <button class="tab-btn" onclick="switchTab('grants')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Free Money
+  </button>
+  <button class="tab-btn" onclick="switchTab('fourtwenty')" role="tab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    420 Week
+  </button>
+</nav>
+
+<!-- ========== TAB 1: WELCOME ========== -->
+<div id="tab-welcome" class="tab-panel active">
+  <div class="section-title">Welcome, Sunni</div>
+  <div class="section-subtitle">Here is what we found and how we can help. Everything in this document is actionable -- no fluff, no jargon. Just real steps you can take, starting today.</div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value">4.9</div>
+      <div class="stat-label">Stars / 2,046+ Reviews</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">119</div>
+      <div class="stat-label">Blog Posts Written</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">42</div>
+      <div class="stat-label">Events Hosted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">Only 1</div>
+      <div class="stat-label">Wellness Dispensary in Ward 3</div>
+    </div>
+  </div>
+
+  <div class="card win-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      What Is Already Working Beautifully
+    </div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li><strong>Your reviews are exceptional.</strong> 2,046+ reviews at 4.9 stars. Customers describe your team as "unbelievably friendly and smart" and "educated on their product." That kind of loyalty is rare and cannot be bought.</li>
+        <li><strong>Your wellness integration is one of a kind in DC.</strong> No other dispensary in this area offers Reiki, sound baths, yoga, chakra balancing, and crystal healing alongside cannabis. You are the only one doing this.</li>
+        <li><strong>Your community trusts you.</strong> Black-owned, community-centered, rooted in Tenleytown. Customers come back because they feel seen and cared for.</li>
+        <li><strong>You just got a game-changing license.</strong> The educational taste endorsement lets you pair edibles with events. Most dispensaries in DC cannot do this. That is a real competitive advantage.</li>
+        <li><strong>Your brand vision is clear and genuine.</strong> "Not just a product, but a plant medicine that supports mind, body, and spirit." That is not a marketing line -- that is who you are, and people can tell.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      What This Document Covers
+    </div>
+    <div class="card-text">
+      We looked at your website, your competitors, the grants available to you, and the opportunities in front of you. Here is what we found:
+      <br><br>
+      <strong>Your Website</strong> -- There are some behind-the-scenes issues hurting your Google visibility. Most are quick fixes.<br>
+      <strong>Your Market</strong> -- Where you stand vs. nearby dispensaries, and the advantages nobody else has.<br>
+      <strong>The Plan</strong> -- Six priorities, in order, with costs and timelines. Nothing is over your head.<br>
+      <strong>Apparel</strong> -- A zero-risk way to add a new revenue stream using your brand aesthetic.<br>
+      <strong>Free Money</strong> -- Grants you can apply for right now, including one with an April 7 deadline.<br>
+      <strong>420 Week</strong> -- Everything that needs to happen before April 18-20.
+    </div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Robert's Commitment
+    </div>
+    <div class="card-text">
+      1 to 1.5 hours per week of consulting time, at no charge. The goal is to help you build the tools to grow on your own -- not to create a dependency. Every recommendation here is designed so you or your team can execute it independently.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 2: WEBSITE ========== -->
+<div id="tab-website" class="tab-panel">
+  <div class="section-title">Your Website</div>
+  <div class="section-subtitle">Your content is great. The plumbing behind it just needs fixing. Here are the issues, explained in plain English, with exactly how to fix each one.</div>
+
+  <!-- Issue 1 -->
+  <div class="card urgent-card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Google still thinks your business is called "Top Level"
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      There is hidden code on every page of your website -- like a phone book entry that only Google can read. Right now, that entry still says "Top Level," uses your old email (topleveldc1@gmail.com), and points to the old website address. Google is confused about who you are.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top: 0; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+      <div class="card-text">
+        <strong>Think of it this way:</strong> You changed the sign on the building, but the lease, the phone book, and your business license all still say the old name. That is what Google sees.
+        <br><br>
+        <strong>The fix:</strong> <span class="badge badge-easy">Easy</span> Your web person updates the business info in Wix settings. Takes about 30 minutes. Or, you can update your Google Business Profile yourself in 15 minutes (go to business.google.com and make sure all your info is correct).
+        <br><br>
+        <strong>Impact:</strong> This affects your Google search ranking, your Google Maps listing, and whether customers see the right info when they search for you.
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 2 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+      119 blog posts Google probably cannot find
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      You have a huge library of helpful articles -- strain guides, DC cannabis law guides, wellness content. But the way Wix builds your website means Google often cannot actually read those articles.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top: 0; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+      <div class="card-text">
+        <strong>Think of it this way:</strong> You wrote 119 articles, but they are locked in a filing cabinet. Google can see the cabinet but cannot always open the drawers.
+        <br><br>
+        <strong>The fix:</strong> <span class="badge badge-medium">Medium</span> Submit your sitemap to Google Search Console. This gives Google a full map of all your pages and asks it to come read them. A Wix specialist can do this in about an hour.
+        <br><br>
+        <strong>Why it matters:</strong> Those blog posts are supposed to bring in people searching for things like "best cannabis for anxiety DC" or "dispensary near Tenleytown." If Google cannot find them, all that writing is going to waste.
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 3 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Your business hours are invisible to Google
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      The behind-the-scenes code does not include your hours of operation. When someone Googles you, Google may not show when you are open.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top: 0; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+      <div class="card-text">
+        <strong>Think of it this way:</strong> It is like having a shop with no sign on the door saying when you are open. People might not come because they are not sure if you are there.
+        <br><br>
+        <strong>The fix:</strong> <span class="badge badge-easy">Easy</span> This can be fixed in two places: (1) Your Google Business Profile -- you can update this yourself in 10 minutes. (2) The website code -- your web person adds a few lines. About 30 minutes.
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 4 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      "Sound Bath Sunday" is misspelled in 8+ links
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      Multiple event pages have web addresses that say "south-bath-sunday" instead of "sound-bath-sunday." This affects at least 8 event links.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top: 0; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+      <div class="card-text">
+        <strong>Think of it this way:</strong> It is like printing "Sund Bath" on your flyers -- except online, search engines remember it and it makes it harder for people to find your events when they search for "sound bath DC."
+        <br><br>
+        <strong>The fix:</strong> <span class="badge badge-medium">Medium</span> Your web person changes each URL slug and Wix automatically redirects the old links. About 1-2 hours of work.
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 5 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Event signups are broken (Calendly payment issue)
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      Sound Bath Sunday has zero signups right now -- not because people are not interested, but because the payment processing through Calendly got flagged and is not working.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top: 0; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+      <div class="card-text">
+        <strong>Quick fix for this weekend:</strong> <span class="badge badge-easy">Easy</span> Create a free Google Form where people can sign up, then collect payment at the door or via Venmo/Zelle. Not fancy, but it works immediately.
+        <br><br>
+        <strong>Better fix for next week:</strong> <span class="badge badge-medium">Medium</span> Set up Eventbrite. Free for free events, small fee for paid tickets. Eventbrite also helps people discover your events -- your competitor YANA has 117 events on Eventbrite because that is where the DC wellness audience looks.
+        <br><br>
+        <strong>Bottom line:</strong> The service exists, the content is great, people want to come. The only thing broken is the door. Let us fix the door.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      The 15-Minute Fix You Can Do Right Now
+    </div>
+    <div class="card-text">
+      Go to <strong>business.google.com</strong> and update your Google Business Profile. Make sure it says "Aligned DC" (not "Top Level"), has your current email, your correct website address, and your hours. This is the single highest-impact thing you can do today, and you do not need anyone's help to do it.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      About Your Web Team
+    </div>
+    <div class="card-text">
+      You mentioned the current arrangement is $700/month for website and social media combined, and that Google metrics have actually gone down since it started. A good Wix specialist on Upwork can fix all of these issues for a one-time cost of $200-400. For ongoing social media, a skilled freelancer runs $300-400/month -- so even if you replace everything, you save money.
+      <br><br>
+      <strong>Our recommendation:</strong> Hire a Wix specialist for the one-time fixes. If the social media person (the one in Peru who does good video editing) is working well, keep them. The goal is to stop paying $700/month for declining results and start paying less for better results.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 3: MARKET ========== -->
+<div id="tab-market" class="tab-panel">
+  <div class="section-title">Your Market</div>
+  <div class="section-subtitle">You have advantages that nobody else in this area has. Let us make sure people know about them.</div>
+
+  <!-- Your Advantages -->
+  <div class="card win-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Your Competitive Advantages
+    </div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li><strong>You have the best reviews in the area.</strong> 2,046+ reviews at 4.9 stars. Only Takoma Wellness comes close in volume, and they have been around since 2013.</li>
+        <li><strong>Nobody else combines wellness and cannabis like you do.</strong> Reiki, sound baths, yoga, chakra balancing, crystals -- in a dispensary? That is your moat. No competitor is touching that.</li>
+        <li><strong>You are one of only two dispensaries in Ward 3.</strong> Mr. Green is about 1.5 miles away. Most other competitors are 2-3 miles out. Your location is underserved.</li>
+        <li><strong>The educational taste endorsement is a game-changer.</strong> You can now legally pair edibles with events. Most dispensaries in DC cannot do this. Think "Sound Bath + Edible Flight" -- nobody else can offer that.</li>
+        <li><strong>Black-owned in Tenleytown.</strong> In an affluent, socially-conscious neighborhood, your identity resonates. It matters to your customers.</li>
+        <li><strong>Your brand is authentic.</strong> "Aligned" is not a marketing angle. It is who you are. Customers feel that, and it is why your reviews are what they are.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size: 1.15rem; margin-top: 1.5rem;">Nearby Competitors at a Glance</div>
+
+  <div class="compare-grid">
+    <div class="card">
+      <div class="card-title" style="font-size: 0.95rem;">Green Theory <span class="badge badge-gold" style="margin-left: auto;">Watch This One</span></div>
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Location</span><span class="info-value">Palisades (~2.5 mi)</span></div>
+        <div class="info-row"><span class="info-label">Google Reviews</span><span class="info-value">172 at 5.0</span></div>
+        <div class="info-row"><span class="info-label">Instagram</span><span class="info-value">2,755 followers</span></div>
+        <div class="info-row"><span class="info-label">Blog</span><span class="info-value">25+ posts, weekly</span></div>
+        <div class="info-row"><span class="info-label">Strength</span><span class="info-value">Best content marketing</span></div>
+      </div>
+      <div class="card-text" style="margin-top: 0.5rem; font-size: 0.8rem;">
+        Family-owned, opened 2024. Publishes lifestyle content weekly (strain pairings for game night, playlists, recipes). Their Instagram is nearly 10x yours -- but they do not have your wellness programming, your reviews, or your community roots.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="font-size: 0.95rem;">Takoma Wellness</div>
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Location</span><span class="info-value">Takoma (~3 mi)</span></div>
+        <div class="info-row"><span class="info-label">Google Reviews</span><span class="info-value">992+ at 4.6-4.8</span></div>
+        <div class="info-row"><span class="info-label">Products</span><span class="info-value">500+ (largest selection)</span></div>
+        <div class="info-row"><span class="info-label">Delivery</span><span class="info-value">Same-day, free</span></div>
+        <div class="info-row"><span class="info-label">Strength</span><span class="info-value">DC's oldest (est. 2013)</span></div>
+      </div>
+      <div class="card-text" style="margin-top: 0.5rem; font-size: 0.8rem;">
+        The gold standard in DC. 10x "Best Dispensary" winner. Exclusive Cookies strains. But they are not doing wellness programming, and their location is farther from your customer base.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="font-size: 0.95rem;">Mr. Green</div>
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Location</span><span class="info-value">Van Ness (~1.5 mi)</span></div>
+        <div class="info-row"><span class="info-label">Delivery</span><span class="info-value">30-45 min, $10</span></div>
+        <div class="info-row"><span class="info-label">Payment</span><span class="info-value">Cash, Venmo, Zelle</span></div>
+        <div class="info-row"><span class="info-label">Hours</span><span class="info-value">9am-8pm, 7 days</span></div>
+        <div class="info-row"><span class="info-label">Strength</span><span class="info-value">Convenience & delivery</span></div>
+      </div>
+      <div class="card-text" style="margin-top: 0.5rem; font-size: 0.8rem;">
+        Your closest competitor. Open every day, fast delivery, widest price range ($12-$55 eighths). Competes on convenience, not experience. Different customer.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="font-size: 0.95rem;">YANA Cannabis Wellness</div>
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Location</span><span class="info-value">Dupont Circle</span></div>
+        <div class="info-row"><span class="info-label">Events</span><span class="info-value">117 on Eventbrite</span></div>
+        <div class="info-row"><span class="info-label">Programming</span><span class="info-value">Sound baths, book club, art</span></div>
+        <div class="info-row"><span class="info-label">Model</span><span class="info-value">Moon cycle events 2x/month</span></div>
+        <div class="info-row"><span class="info-label">Strength</span><span class="info-value">Event volume & discovery</span></div>
+      </div>
+      <div class="card-text" style="margin-top: 0.5rem; font-size: 0.8rem;">
+        The closest thing to a direct wellness competitor. More established events program, multiple practitioners. But they likely cannot pair edibles with events the way you now can. That is your edge.
+      </div>
+    </div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      Curbside: You Already Do This -- Let People Know
+    </div>
+    <div class="card-text">
+      You already offer curbside pickup, but it is not promoted anywhere. A few competitors (Takoma, Bloom) actively promote theirs. Simple fix: update your Google Business Profile to show "curbside pickup," put a sandwich board sign on the sidewalk, and mention it once a week on social media. Total cost: $30-60 for the sign. Everything else is free.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 4: THE PLAN ========== -->
+<div id="tab-plan" class="tab-panel">
+  <div class="section-title">The Plan</div>
+  <div class="section-subtitle">Six priorities, in order. Each one is designed to either save you money, bring in customers, or create a new revenue stream. Nothing here costs more than a few hundred dollars.</div>
+
+  <!-- Priority 1 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">1</span>
+      Fix the Website
+      <span class="badge badge-urgent" style="margin-left: 0.5rem;">Saves Money + Gets You Found</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">Fix the broken schema, URL typos, and indexing issues. Update your Google Business Profile. Get your 119 blog posts visible to Google.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Who does the work</span><span class="info-value">Upwork Wix specialist + you (Google Business Profile)</span></div>
+        <div class="info-row"><span class="info-label">Cost</span><span class="info-value">$200-400 one-time</span></div>
+        <div class="info-row"><span class="info-label">Timeline</span><span class="info-value">1-2 weeks for fixes, 3-5 weeks for Google to reflect changes</span></div>
+        <div class="info-row"><span class="info-label">Your time</span><span class="info-value">15 minutes to update Google Business Profile</span></div>
+        <div class="info-row"><span class="info-label">Robert's role</span><span class="info-value">Record a Loom audit video showing the issues, draft the Upwork job post</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 2 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">2</span>
+      Better Web Help at a Better Price
+      <span class="badge badge-free" style="margin-left: 0.5rem;">Saves $300-400/mo</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">Replace the current $700/month web arrangement with affordable Upwork talent. Keep the social media person if they are doing good work.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Current cost</span><span class="info-value">$700/month (web + social bundle)</span></div>
+        <div class="info-row"><span class="info-label">Recommended cost</span><span class="info-value">$200-400/month (social media only, re-hire directly)</span></div>
+        <div class="info-row"><span class="info-label">Savings</span><span class="info-value">$300-400/month ongoing</span></div>
+        <div class="info-row"><span class="info-label">Timeline</span><span class="info-value">Transition in 2-3 weeks</span></div>
+        <div class="info-row"><span class="info-label">Robert's role</span><span class="info-value">Draft job posts, help review top 3 applicants</span></div>
+        <br>
+        The social media person in Peru who edits video well -- if he is separate from the web guy, keep him. If they are bundled, re-hire the social person directly at market rate ($300-400/month). The web person gets replaced by the one-time Upwork fix, then you probably do not need ongoing web help.
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 3 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">3</span>
+      Events and 420 Week
+      <span class="badge badge-urgent" style="margin-left: 0.5rem;">April 18-20 Deadline</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">Fix event signups, get on Eventbrite, promote Sound Bath Sunday, and prepare 420 Customer Appreciation Week. Use that new taste endorsement.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Immediate action</span><span class="info-value">Google Form for this Sunday's signups (free, 30 min)</span></div>
+        <div class="info-row"><span class="info-label">This week</span><span class="info-value">Set up Eventbrite for all events</span></div>
+        <div class="info-row"><span class="info-label">Cost</span><span class="info-value">$50-150 total (Eventbrite fees + signage for 420 Week)</span></div>
+        <div class="info-row"><span class="info-label">Big opportunity</span><span class="info-value">Edible + Event pairing (taste endorsement)</span></div>
+        <div class="info-row"><span class="info-label">Robert's role</span><span class="info-value">Help set up Eventbrite, review 420 Week plan</span></div>
+        <br>
+        The taste endorsement is the unlocking move. "Sound Bath + Edible Flight," a revival of Edible & Easel, cannabis pairing workshops -- these are things your competitors cannot do. 420 Week is the test run. See the 420 Week tab for the full battle plan.
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 4 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">4</span>
+      Apparel -- Zero Risk to You
+      <span class="badge badge-gold" style="margin-left: 0.5rem;">Robert's Investment</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">Wellness-themed apparel that matches your brand aesthetic. Robert invests $1,500-2,500, you provide the retail space. If it sells, we split profits. If it does not, Robert takes the loss.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Your cost</span><span class="info-value">$0</span></div>
+        <div class="info-row"><span class="info-label">Robert's investment</span><span class="info-value">$1,500-2,500</span></div>
+        <div class="info-row"><span class="info-label">Your role</span><span class="info-value">Display space + feedback on designs</span></div>
+        <div class="info-row"><span class="info-label">Timeline</span><span class="info-value">First pieces in-store within 30 days</span></div>
+        <div class="info-row"><span class="info-label">Risk to you</span><span class="info-value">None. If it flops, that is on Robert.</span></div>
+        <br>
+        You already have display fixtures from the rebrand. Your brand aesthetic -- sacred geometry, botanicals, crystals, earth tones -- is the product. Nobody in DC is doing elevated wellness cannabis apparel. See the Apparel tab for the full breakdown.
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 5 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">5</span>
+      Promote Curbside Pickup
+      <span class="badge badge-free" style="margin-left: 0.5rem;">Free + Immediate</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">You already offer curbside. Just tell people about it. Update Google, put a sign outside, mention it on social media.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Cost</span><span class="info-value">$30-60 (sandwich board sign)</span></div>
+        <div class="info-row"><span class="info-label">Google Business Profile</span><span class="info-value">Add "curbside pickup" attribute (free, 5 min)</span></div>
+        <div class="info-row"><span class="info-label">Payment at curb</span><span class="info-value">Venmo/Zelle/CashApp (free to set up)</span></div>
+        <div class="info-row"><span class="info-label">Social media</span><span class="info-value">Mention curbside 1x/week</span></div>
+        <div class="info-row"><span class="info-label">Goal</span><span class="info-value">3-5 curbside orders per week within a month</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 6 -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <span class="priority-num">6</span>
+      Scale Your Space Rental + Memberships
+      <span class="badge badge-gold" style="margin-left: 0.5rem;">Survival Strategy</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">Your collaborative space rental model (like Buna & Bliss) is smart. Scale it to 4-5 events per month. Launch the $30 membership. Let cannabis sales run in the background while wellness becomes the growth engine.</div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Current events</span><span class="info-value">~2 per month</span></div>
+        <div class="info-row"><span class="info-label">Target</span><span class="info-value">4-5 different events per month</span></div>
+        <div class="info-row"><span class="info-label">Cost</span><span class="info-value">$0 (practitioners bring their own audience)</span></div>
+        <div class="info-row"><span class="info-label">Revenue model</span><span class="info-value">Flat fee ($100-300/session) or revenue share (60/40)</span></div>
+        <div class="info-row"><span class="info-label">$30 Membership</span><span class="info-value">Discount on purchases + free monthly event + early access</span></div>
+        <br>
+        The membership is less about the $30/month and more about locking in repeat visits. A member who comes for their "free" monthly event buys cannabis while they are there. The event is the hook. The dispensary sale is the real revenue.
+        <br><br>
+        <strong>Next step:</strong> Send the practitioner pitch to 10 wellness practitioners this week. Post on Instagram that you are looking for practitioners. Buna & Bliss already proves the model works -- now replicate it.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Total First-Month Investment
+    </div>
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">Wix specialist (one-time)</span><span class="info-value">$200-400</span></div>
+      <div class="info-row"><span class="info-label">Eventbrite fees</span><span class="info-value">~$50</span></div>
+      <div class="info-row"><span class="info-label">420 Week signage</span><span class="info-value">$50-100</span></div>
+      <div class="info-row"><span class="info-label">Curbside sign</span><span class="info-value">$30-60</span></div>
+      <div class="info-row" style="border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.25rem;"><span class="info-label" style="color: var(--gold); font-weight: 600;">Total</span><span class="info-value" style="color: var(--gold); font-weight: 700; font-size: 1.1rem;">$330-610</span></div>
+      <div class="info-row"><span class="info-label" style="color: var(--green-bright);">Monthly savings from web team change</span><span class="info-value" style="color: var(--green-bright); font-weight: 600;">$300-400/month</span></div>
+      <br>
+      <strong>The changes pay for themselves by Month 2.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 5: APPAREL ========== -->
+<div id="tab-apparel" class="tab-panel">
+  <div class="section-title">The Apparel Opportunity</div>
+  <div class="section-subtitle">Your brand aesthetic IS the product. Nobody else in DC is doing elevated wellness cannabis apparel. The market is wide open.</div>
+
+  <div class="card win-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Why This Works for Aligned
+    </div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li><strong>You already sell lifestyle products.</strong> Crystals, sage bundles, herbal teas. Your customers are buying your vibe, not just your product.</li>
+        <li><strong>The wellness aesthetic gap is wide open.</strong> Almost all cannabis merch is either stoner culture (pot leaves, 420 jokes) or streetwear hype (Cookies, Jungle Boys). Nobody is doing sacred geometry, botanical art, chakra imagery, or spiritual wellness.</li>
+        <li><strong>Your customers expect it.</strong> Someone buying rose quartz and sage is the exact person who will buy a "Plant Medicine" hoodie with a mandala pattern.</li>
+        <li><strong>Every piece sold is a walking billboard.</strong> A hoodie worn in Tenleytown is free advertising you cannot buy.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      The Design Direction
+    </div>
+    <div class="card-text">
+      <strong>What fits your brand:</strong>
+      <ul class="check-list">
+        <li>Sacred geometry patterns (Flower of Life, Metatron's Cube)</li>
+        <li>Chakra color progressions with botanical elements</li>
+        <li>Crystal illustrations (amethyst, rose quartz, clear quartz)</li>
+        <li>Botanical line art -- cannabis leaf rendered as fine art, not stoner culture</li>
+        <li>Moon phases, celestial imagery, mandalas</li>
+        <li>Earth tones: sage green, warm gold, dusty rose, charcoal, cream</li>
+        <li>Phrases: "Plant Medicine," "Intentional Wellness," "Aligned & Elevated"</li>
+      </ul>
+      <br>
+      <strong>What we are NOT doing:</strong> Cartoon pot leaves, "420 Blaze It" messaging, rasta colors, or anything that looks like it belongs at a head shop. This is a wellness brand, and the apparel should reflect that.
+    </div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      The Deal: Zero Risk to You
+    </div>
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">Robert invests</span><span class="info-value">$1,500-2,500</span></div>
+      <div class="info-row"><span class="info-label">Sunni provides</span><span class="info-value">Retail display space + feedback on designs</span></div>
+      <div class="info-row"><span class="info-label">Revenue split</span><span class="info-value">Negotiable (e.g., 50/50 after cost recovery)</span></div>
+      <div class="info-row"><span class="info-label">If it does not sell</span><span class="info-value">Robert takes the loss. Your risk is $0.</span></div>
+      <div class="info-row"><span class="info-label">Display fixtures</span><span class="info-value">You already have them from the rebrand</span></div>
+      <div class="info-row"><span class="info-label">Design cost</span><span class="info-value">Near zero (AI-generated, polished by designer)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      The Numbers
+    </div>
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">T-shirt wholesale</span><span class="info-value">$10-14 each</span></div>
+      <div class="info-row"><span class="info-label">T-shirt retail</span><span class="info-value">$28-35 each</span></div>
+      <div class="info-row"><span class="info-label">Hoodie wholesale</span><span class="info-value">$23-32 each</span></div>
+      <div class="info-row"><span class="info-label">Hoodie retail</span><span class="info-value">$55-75 each</span></div>
+      <div class="info-row"><span class="info-label">Tote bag wholesale</span><span class="info-value">$5-10 each</span></div>
+      <div class="info-row"><span class="info-label">Tote bag retail</span><span class="info-value">$15-22 each</span></div>
+      <div class="info-row"><span class="info-label">Target margin</span><span class="info-value">55-65%</span></div>
+      <div class="info-row" style="border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.25rem;">
+        <span class="info-label">Revenue if everything sells</span><span class="info-value" style="color: var(--gold);">$4,500-5,800</span>
+      </div>
+      <div class="info-row"><span class="info-label">Break-even</span><span class="info-value">Sell about 40% of inventory</span></div>
+      <br>
+      For context: a $35 t-shirt generates more profit per sale than 3-4 crystal sales. And every piece is a walking billboard for Aligned DC.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      30-Day Timeline
+    </div>
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">Week 1-2</span><span class="info-value">Design concepts (AI-generated, your feedback)</span></div>
+      <div class="info-row"><span class="info-label">Week 3</span><span class="info-value">Order from local DMV printer</span></div>
+      <div class="info-row"><span class="info-label">Week 4</span><span class="info-value">Product photos, in-store display, social media launch</span></div>
+      <br>
+      First run: 48 t-shirts (2-3 designs), 12 hoodies, 12 hats, 24 totes, 100 sticker packs. Small enough to test, big enough to learn from.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 6: GRANTS ========== -->
+<div id="tab-grants" class="tab-panel">
+  <div class="section-title">Free Money</div>
+  <div class="section-subtitle">Grants and programs you are eligible for right now. Some have deadlines coming up fast.</div>
+
+  <!-- Urgent Grant -->
+  <div class="card urgent-card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Tenleytown Main Street Grant <span class="badge badge-urgent" style="margin-left: 0.5rem;">Deadline: April 7</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      Up to $10,000 for storefront improvements, security upgrades, and growth. You are IN the Tenleytown Main Street corridor -- this grant was basically made for businesses like yours.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Amount</span><span class="info-value">Up to $10,000</span></div>
+        <div class="info-row"><span class="info-label">Deadline</span><span class="info-value" style="color: var(--coral); font-weight: 600;">April 7, 2026</span></div>
+        <div class="info-row"><span class="info-label">Decision by</span><span class="info-value">May 1, 2026</span></div>
+        <div class="info-row"><span class="info-label">Can use for</span><span class="info-value">Interior/exterior improvements, security, growth</span></div>
+        <div class="info-row"><span class="info-label">Effort level</span><span class="info-value"><span class="badge badge-easy">Low</span></span></div>
+        <div class="info-row"><span class="info-label">Competition</span><span class="info-value">Low -- neighborhood-level grant</span></div>
+        <div class="info-row"><span class="info-label">How to apply</span><span class="info-value">SurveyMonkey form (online)</span></div>
+        <div class="info-row"><span class="info-label">Contact</span><span class="info-value">202-362-1815</span></div>
+        <br>
+        Since 2016, Tenleytown Main Street has awarded $325,000+ to 50+ businesses. This is not a competitive national program -- it is your neighborhood looking to help local businesses thrive. No repayment required.
+      </div>
+    </div>
+  </div>
+
+  <!-- Flowhub -->
+  <div class="card win-card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      Flowhub Social Equity Program <span class="badge badge-free" style="margin-left: 0.5rem;">Perfect Timing</span>
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      POS software at $4.20/month instead of $500+/month. You are already switching to Flowhub -- this could make it nearly free for up to 3 years.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Value</span><span class="info-value">~$500/month software for $4.20/month</span></div>
+        <div class="info-row"><span class="info-label">Duration</span><span class="info-value">Up to 3 years</span></div>
+        <div class="info-row"><span class="info-label">Deadline</span><span class="info-value">Rolling (no deadline)</span></div>
+        <div class="info-row"><span class="info-label">Eligibility</span><span class="info-value">Minority-owned dispensary (you qualify)</span></div>
+        <div class="info-row"><span class="info-label">Effort level</span><span class="info-value"><span class="badge badge-easy">Low</span></span></div>
+        <br>
+        Since you are already in the process of switching from BLAZE to Flowhub, this is perfect timing. Apply for the social equity program as part of your transition.
+      </div>
+    </div>
+  </div>
+
+  <!-- Amber Grant -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Amber Grant for Women
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      $10,000 monthly grants for women-owned businesses. Three winners every month, plus additional $25,000 annual grants. Application fee is just $15.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Amount</span><span class="info-value">$10,000 (3 winners per month)</span></div>
+        <div class="info-row"><span class="info-label">Deadline</span><span class="info-value">Apply any month (open 1st through last day)</span></div>
+        <div class="info-row"><span class="info-label">Fee</span><span class="info-value">$15 per application</span></div>
+        <div class="info-row"><span class="info-label">May category</span><span class="info-value">"Mental & Emotional Support" -- fits your wellness focus</span></div>
+        <div class="info-row"><span class="info-label">Effort level</span><span class="info-value"><span class="badge badge-medium">Medium</span></span></div>
+        <br>
+        <strong>Key question:</strong> Is Aligned DC woman-owned (at least 50% ownership)? If yes, this opens up a significant number of additional grants including IFundWomen, SoGal Foundation, and more. This is worth clarifying.
+      </div>
+    </div>
+  </div>
+
+  <!-- NCIA -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      NCIA Social Equity Scholarship
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      Free annual membership in the National Cannabis Industry Association (normally $1,000+) with $5,000+ in benefits including networking, advocacy access, and educational resources.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Value</span><span class="info-value">$5,000+ in benefits</span></div>
+        <div class="info-row"><span class="info-label">Deadline</span><span class="info-value">Rolling (no deadline)</span></div>
+        <div class="info-row"><span class="info-label">Competition</span><span class="info-value">Low -- 100+ scholarships already granted</span></div>
+        <div class="info-row"><span class="info-label">Effort level</span><span class="info-value"><span class="badge badge-easy">Low</span></span></div>
+        <br>
+        No reason not to apply. Free membership unlocks networking, advocacy access, and connections to resources and investors across the cannabis industry.
+      </div>
+    </div>
+  </div>
+
+  <!-- CBE -->
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      DC Certified Business Enterprise (CBE)
+      <span style="margin-left:auto"><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+    <div class="card-text">
+      Not a grant itself, but a certification that unlocks reduced license fees, procurement preferences, and eligibility for other programs. DC specifically created a Medical Cannabis CBE category.
+    </div>
+  </div>
+  <div class="expand-content">
+    <div class="card" style="margin-top:0; border-top:none; border-radius: 0 0 var(--radius) var(--radius);">
+      <div class="card-text">
+        <div class="info-row"><span class="info-label">Benefits</span><span class="info-value">Reduced fees, procurement preferences, program eligibility</span></div>
+        <div class="info-row"><span class="info-label">Eligibility</span><span class="info-value">51%+ DC-resident owned, 50%+ DC employees</span></div>
+        <div class="info-row"><span class="info-label">Effort level</span><span class="info-value"><span class="badge badge-medium">Medium</span></span></div>
+        <br>
+        If you are not already CBE-certified, this should be a priority. It is a gateway to multiple other programs and saves money on licensing.
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming ones -->
+  <hr class="divider">
+  <div class="section-title" style="font-size: 1.1rem;">Worth Watching</div>
+
+  <div class="card">
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">NAACP Powershift Grant ($25K)</span><span class="info-value">Opens ~October 2026</span></div>
+      <div class="info-row"><span class="info-label">Eaze Momentum Accelerator ($50K, equity-free)</span><span class="info-value">Watch for 2026 cycle</span></div>
+      <div class="info-row"><span class="info-label">IFundWomen / BOSS Impact Fund ($10K)</span><span class="info-value">Rolling (if woman-owned)</span></div>
+      <div class="info-row"><span class="info-label">SoGal Foundation ($5-10K)</span><span class="info-value">Rolling (if woman-owned)</span></div>
+      <div class="info-row"><span class="info-label">Comcast RISE ($5K + tech makeover)</span><span class="info-value">Watch for 2026 DC cycle</span></div>
+    </div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      One Question That Doubles Your Options
+    </div>
+    <div class="card-text">
+      <strong>Is Aligned DC woman-owned (at least 50% ownership)?</strong> If yes, the available grant pool roughly doubles. The Amber Grant, IFundWomen, SoGal Foundation, and several others are specifically for women-owned businesses. This is worth clarifying.
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB 7: 420 WEEK ========== -->
+<div id="tab-fourtwenty" class="tab-panel">
+  <div class="section-title">420 Week Battle Plan</div>
+  <div class="section-subtitle">April 18-20, 2026. Everything should be ready by then. This is the test run for everything we are building.</div>
+
+  <div class="countdown-box">
+    <div class="countdown-label">Days Until 420 Week</div>
+    <div class="countdown-value" id="countdown-days">--</div>
+    <div class="countdown-sub">April 18-20, 2026</div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Your Secret Weapon: The Taste Endorsement
+    </div>
+    <div class="card-text">
+      You just got the educational taste endorsement a couple weeks ago. This means you can now legally pair edibles with events. Most dispensaries in DC cannot do this. This should be the centerpiece of 420 Week.
+      <br><br>
+      <strong>Event ideas that use this advantage:</strong>
+      <ul class="check-list">
+        <li><strong>Sound Bath + Edible Flight:</strong> Guided sound healing paired with curated micro-dose edibles. No competitor can offer this combination.</li>
+        <li><strong>Edible & Easel Revival:</strong> The cannabis + art event from your Top Level days, now legal with the taste endorsement. This is the first time you can properly do this.</li>
+        <li><strong>Cannabis Tasting Workshop:</strong> An educational session where customers learn about terpenes, effects, and pairings. Think wine tasting, but for edibles.</li>
+        <li><strong>420 Sunrise Session:</strong> Morning yoga or meditation with a wellness-focused micro-dose. Start the celebration with intention.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section-title" style="font-size: 1.1rem; margin-top: 1.5rem;">Week-by-Week Countdown</div>
+
+  <div class="card">
+    <div class="card-title"><span class="priority-num">1</span> This Week (3.5 Weeks Out)</div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li>Decide on 2-3 events for the three-day stretch (Friday kickoff, Saturday main event, Sunday wind-down)</li>
+        <li>Fix event signups: Google Form today for this Sunday, Eventbrite for everything going forward</li>
+        <li>Create Eventbrite listings for all 420 Week events</li>
+        <li>Post "Save the Date" on Instagram and Facebook</li>
+        <li>Start collecting customer emails at the register (simple sign-up sheet)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="priority-num">2</span> Next Week (2.5 Weeks Out)</div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li>Daily social media promotion begins (social media person handles this)</li>
+        <li>Send email blast to customer list (Mailchimp free tier for up to 500 contacts)</li>
+        <li>List events on Eventbrite, AllEvents.in, and DC cannabis event calendars</li>
+        <li>Reach out to 3-5 wellness practitioners about collaborating on 420 Week events</li>
+        <li>Order any signage or materials (Canva + local print shop, $50-100)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="priority-num">3</span> Week Before (1.5 Weeks Out)</div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li>Ramp up posting frequency -- daily countdown posts</li>
+        <li>Partner cross-promotion (tag collaborating practitioners, they tag you)</li>
+        <li>In-store signage goes up</li>
+        <li>Confirm all event details, practitioners, supplies</li>
+        <li>Brief staff on the schedule and any special promotions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="card-title"><span class="priority-num" style="background: var(--coral);">!</span> Event Week (April 18-20)</div>
+    <div class="card-text">
+      <ul class="check-list">
+        <li>Final social media push -- morning-of posts, Stories, behind-the-scenes</li>
+        <li>Collect emails and social media follows from every attendee</li>
+        <li>Sell memberships at events ($30/month)</li>
+        <li>Track revenue per event (how many people came, what they spent, what they bought)</li>
+        <li>Take photos and video for future content</li>
+        <li>Promote curbside pickup for the week</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      What We Measure After 420 Week
+    </div>
+    <div class="card-text">
+      <div class="info-row"><span class="info-label">Total event attendees</span><span class="info-value">Target: 50+ across all events</span></div>
+      <div class="info-row"><span class="info-label">Email addresses collected</span><span class="info-value">Target: 30+</span></div>
+      <div class="info-row"><span class="info-label">Memberships sold</span><span class="info-value">Target: 5-10</span></div>
+      <div class="info-row"><span class="info-label">Revenue per event</span><span class="info-value">Track ticket + product sales</span></div>
+      <div class="info-row"><span class="info-label">Social media growth</span><span class="info-value">New followers gained during the week</span></div>
+      <br>
+      This data tells us what works and what to double down on. It is the foundation for everything that comes after.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-name">Robert Smith</div>
+  <div class="footer-detail">Machine King Labs</div>
+  <div class="footer-detail"><a href="mailto:robertsmith@machinekinglabs.com">robertsmith@machinekinglabs.com</a></div>
+  <div class="footer-detail" style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--cream-muted);">Prepared March 2026. All data verified at time of research.</div>
+</footer>
+
+<script>
+// Tab switching
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Expandable cards
+function toggleExpand(el) {
+  el.classList.toggle('open');
+  const content = el.nextElementSibling;
+  if (content && content.classList.contains('expand-content')) {
+    content.classList.toggle('open');
+  }
+}
+
+// Countdown
+function updateCountdown() {
+  const target = new Date('2026-04-18T00:00:00');
+  const now = new Date();
+  const diff = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+  const el = document.getElementById('countdown-days');
+  if (el) {
+    if (diff > 0) {
+      el.textContent = diff;
+    } else if (diff === 0) {
+      el.textContent = 'TODAY';
+    } else {
+      el.textContent = 'Happened';
+    }
+  }
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+</script>
+
+</body>
+</html>
